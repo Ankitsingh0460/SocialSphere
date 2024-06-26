@@ -9,7 +9,11 @@ import multer from "multer";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
+import { createPost } from "./controllers/posts.js";
 import authRoute from "./routes/auth.js";
+import userRoute from "./routes/user.js";
+import postRoute from "./routes/posts.js";
+import { verifyToken } from "./middleware/auth.js";
 
 const URL = process.env.URL;
 const PORT = process.env.PORT || 3001;
@@ -44,7 +48,10 @@ const upload = multer({ storage });
 //Routes
 
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/posts", verifyToken, upload.single("picture"), createPost);
 app.use("/auth", authRoute);
+app.use("/user", userRoute);
+app.use("/posts", postRoute);
 //mongodb connect
 mongoose
   .connect("mongodb://localhost:27017/socialmedia")
