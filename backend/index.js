@@ -5,10 +5,11 @@ import cors from "cors";
 import helmet from "helmet";
 import path from "path";
 import morgan from "morgan";
-import multer, { diskStorage } from "multer";
+import multer from "multer";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
-import { register } from "module";
+import { register } from "./controllers/auth.js";
+import authRoute from "./routes/auth.js";
 
 const URL = process.env.URL;
 const PORT = process.env.PORT || 3001;
@@ -20,7 +21,7 @@ dotenv.config();
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
-
+app.use(express.urlencoded({ extended: false }));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 app.use(morgan("common"));
@@ -40,7 +41,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+//Routes
+
 app.post("/auth/register", upload.single("picture"), register);
+app.use("/auth", authRoute);
 //mongodb connect
 mongoose
   .connect("mongodb://localhost:27017/socialmedia")

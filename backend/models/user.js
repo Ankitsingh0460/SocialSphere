@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    friends: {
+      type: String,
+      default: [],
+    },
     location: String,
     occupation: String,
     viewdProfile: Number,
@@ -37,7 +41,5 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
 const USER = mongoose.model("User", userSchema);
-
 export default USER;
