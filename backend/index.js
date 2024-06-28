@@ -14,6 +14,9 @@ import authRoute from "./routes/auth.js";
 import userRoute from "./routes/user.js";
 import postRoute from "./routes/posts.js";
 import { verifyToken } from "./middleware/auth.js";
+import USER from "./models/user.js";
+import Post from "./models/post.js";
+import { users, posts } from "./data/data.js";
 
 const URL = process.env.URL;
 const PORT = process.env.PORT || 3001;
@@ -55,8 +58,9 @@ app.use("/posts", postRoute);
 //mongodb connect
 mongoose
   .connect("mongodb://localhost:27017/socialmedia")
-  .then(() => console.log("Mongodb is connected"))
-  .catch((err) => console.log("error", err));
+  .then(() => console.log("Mongodb is connected"));
+USER.insertMany(users);
+Post.insertMany(posts).catch((err) => console.log("error", err));
 app.listen(PORT, () => {
   console.log(`Server started ${PORT}`);
 });
